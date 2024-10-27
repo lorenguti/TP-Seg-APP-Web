@@ -23,9 +23,19 @@ CREATE TABLE IF NOT EXISTS users (
   dni int DEFAULT NULL,
   name varchar(45) DEFAULT NULL,
   user varchar(45) DEFAULT NULL,
+  email varchar(45) DEFAULT NULL,
   password varchar(45) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Poblar tabla
+INSERT INTO users (id, dni, name, user, email, password) VALUES
+(1, 12345678, 'John Doe', 'jdoe', 'jdoe@example.com', 'pass123'),
+(2, 87654321, 'Jane Smith', 'jsmith', 'jsmith@example.com', 'pass456'),
+(3, 13579246, 'Alice Johnson', 'ajohnson', 'alicej@example.com', 'alice789'),
+(4, 24681357, 'Bob Brown', 'bbrown', 'bbrown@example.com', 'bob321'),
+(5, 98765432, 'Charlie White', 'cwhite', 'cwhite@example.com', 'charlie654');
+
 
 EOF
 
