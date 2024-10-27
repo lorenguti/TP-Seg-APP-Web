@@ -1,19 +1,30 @@
 package com.example.demo.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-@RestController
+@Controller
 public class LoginController {
 
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";  // Renderiza la plantilla login.html
+    }
+
     @PostMapping("/login")
-    public String login(@RequestParam String dni, @RequestParam String password) {
+    public String handleLogin( @RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+        
         String jdbcUrl = "jdbc:mysql://localhost:3306/rrhh_db"; // Reemplaza con tu base de datos
         String dbUsername = "root"; // Usuario de MySQL
         String dbPassword = "Elpeque7/85"; // Contraseña de MySQL
@@ -22,17 +33,24 @@ public class LoginController {
             Statement statement = connection.createStatement();
 
             // Vulnerabilidad de SQL Injection al concatenar directamente el input en la consulta
-            String query = "SELECT * FROM users WHERE dni = '" + dni + "' AND password = '" + password + "'";
+            String query = "SELECT * FROM users WHERE dni = '" + username + "' AND password = '" + password + "'";
             ResultSet resultSet = statement.executeQuery(query);
 
+            
             if (resultSet.next()) {
-                return "Login exitoso: Bienvenido, " + resultSet.getString("email");
+                return "redirect:/home";  // Redirige a la página de inicio
             } else {
-                return "Credenciales incorrectas";
+                model.addAttribute("error", "Usuario o contraseña incorrectos");
+                return "login";  // Muestra el login nuevamente con un mensaje de error
             }
         } catch (Exception e) {
             e.printStackTrace();
             return "Error en el login";
         }
+    }
+
+    @GetMapping("/home")
+    public String showHomePage() {
+        return "home";  // Renderiza la plantilla home.html
     }
 }
