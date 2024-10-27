@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.page;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +8,6 @@ public class LoginPageController {
 
     @GetMapping("/loginPage")
     public String loginPage() {
-        return "login";  // Esto corresponde al archivo `src/main/resources/templates/login.html`
+        return "login";
     }
 }
