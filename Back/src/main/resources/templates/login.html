@@ -16,6 +16,30 @@
         
         <button type="submit">Iniciar Sesión</button>
     </form>
-    <p style="color:red;">[[${error}]]</p> <!-- Mensaje de error, si existe -->
+    <p id="response"></p>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const dni = document.getElementById("dni").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `dni=${dni}&password=${password}`
+            });
+            if (response.ok) { // Verifica si la respuesta es 200-299
+                // Redireccionar a la página deseada
+                window.location.href = "/home"; // Cambia "/dashboard" por la ruta que necesites
+            } else {
+                const text = await response.text();
+                document.getElementById("response").textContent = text; // Muestra el mensaje de error
+            }
+        });
+    </script>
 </body>
 </html>
