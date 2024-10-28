@@ -32,12 +32,11 @@
                 },
                 body: `dni=${dni}&password=${password}`
             });
-            if (response.ok) { // Verifica si la respuesta es 200-299
-                // Redireccionar a la página deseada
-                window.location.href = "/home"; // Cambia "/dashboard" por la ruta que necesites
+            if (response.ok) { 
+                window.location.href = "/home";
             } else {
                 const text = await response.text();
-                document.getElementById("response").textContent = text; // Muestra el mensaje de error
+                document.getElementById("response").textContent = text; 
             }
         });
     </script>

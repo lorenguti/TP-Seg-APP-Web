@@ -10,13 +10,11 @@ public class ServicesController {
 
     @GetMapping("/updateProfile")
     public String updateProfile() {
-        // Aquí iría la lógica de actualización de perfil
         return "update_profile";
     }
 
     @GetMapping("/payroll")
     public String payroll() {
-        // Aquí iría la lógica de consulta de nóminas
         return "recibos";
     }
 

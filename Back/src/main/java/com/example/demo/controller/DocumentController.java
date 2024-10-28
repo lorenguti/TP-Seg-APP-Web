@@ -28,8 +28,16 @@ public class DocumentController {
         return "files";
     }
 
+    @GetMapping("/files/receipts/{id}")
+    public ResponseEntity<Resource> getReceipt(@PathVariable Long id) {
+        Resource file = documentService.getReceiptById(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
     // Endpoint para descargar un documento
-    @GetMapping("/files/transactions/{id}")
+    @GetMapping("/files/contracts/{id}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {       
         Resource file = documentService.getDocumentById(id);
         return ResponseEntity.ok()

@@ -19,13 +19,29 @@ public class DocumentService {
         List<Document> documents = new ArrayList<>();
         documents.add(new Document(1L, "Contrato de Trabajo", LocalDate.of(2022, 5, 1)));
         documents.add(new Document(2L, "Certificado de Empleo", LocalDate.of(2023, 1, 15)));
-        documents.add(new Document(3L, "Recibo de Sueldo", LocalDate.of(2023, 9, 30)));
+        documents.add(new Document(3L, "Declaracion Jurada", LocalDate.of(2023, 9, 30)));
         return documents;
+    }
+
+    public Resource getReceiptById(Long id) {
+        try {
+            String filePath = "/documents/receipts/" + id + ".pdf";
+            Path file = Paths.get(getClass().getResource(filePath).toURI());
+            Resource resource = new UrlResource(file.toUri());
+            
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("No se puede leer el archivo");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al cargar el archivo", e);
+        }
     }
 
     public Resource getDocumentById(Long id) {
         try {
-            String filePath = "/documents/" + id + ".pdf";
+            String filePath = "/documents/contracts/" + id + ".des";
             Path file = Paths.get(getClass().getResource(filePath).toURI());
             Resource resource = new UrlResource(file.toUri());
             
