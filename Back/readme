@@ -1,1 +1,33 @@
 Carpeta para proyecto Back en Java
+
+Script para hacer recon:
+
+const endpoints = [
+    "/files/receipts",
+    "/files/contracts",
+    "/files/tax-forms",
+    "/files/payslips",
+    "/files/medical-reports",
+    "/files/performance-reviews",
+    "/files/id-copies"
+];
+
+const idStart = 700;
+const idEnd = 800;
+
+async function probeEndpoints() {
+    for (const endpoint of endpoints) {
+        for (let id = idStart; id <= idEnd; id++) {
+            const url = `${endpoint}/${id}`;
+            try {
+                const response = await fetch(url, { method: "POST" });
+                const text = await response.text();
+                console.log(`Respuesta para ${url}: ${text}`);
+            } catch (error) {
+                console.error(`Error en ${url}:`, error);
+            }
+        }
+    }
+}
+
+probeEndpoints();
