@@ -1,8 +1,7 @@
-para el sql injection
+Para el sql injection:
 
-' OR '1'='1
-
-
+* Se puede usar: ' OR '1'='1 tanto en DNI y Password. 
+* O usar: ' OR '1'='1' -- solo en DNI, porque el '--' hace que las demas condiciones de la query que ejecuta del lado de servidor sea comentada.
 
 
 Script para hacer recon:
