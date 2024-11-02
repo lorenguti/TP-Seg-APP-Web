@@ -27,7 +27,7 @@ public class LoginController {
         
         String jdbcUrl = "jdbc:mysql://localhost:3306/rrhh_db"; // Reemplaza con tu base de datos
         String dbUsername = "root"; // Usuario de MySQL
-        String dbPassword = "Elpeque7/85"; // Contraseña de MySQL
+        String dbPassword = "root"; // Contraseña de MySQL
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword)) {
             Statement statement = connection.createStatement();
@@ -40,12 +40,12 @@ public class LoginController {
             if (resultSet.next()) {
                 return "redirect:/home";  // Redirige a la página de inicio
             } else {
-                model.addAttribute("error", "Usuario o contraseña incorrectos");
+                model.addAttribute("errorMessage", resultSet.getString(0));
                 return "login";  // Muestra el login nuevamente con un mensaje de error
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error en el login";
+            model.addAttribute("errorMessage", e.getMessage());
+            return "login";
         }
     }
 }
