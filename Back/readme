@@ -1,4 +1,9 @@
-Carpeta para proyecto Back en Java
+para el sql injection
+
+' OR '1'='1
+
+
+
 
 Script para hacer recon:
 
@@ -12,15 +17,16 @@ const endpoints = [
     "/files/id-copies"
 ];
 
-const idStart = 700;
-const idEnd = 800;
+const idStart = 750;
+const idEnd = 760;
 
+// Función para probar cada endpoint con el rango de IDs
 async function probeEndpoints() {
     for (const endpoint of endpoints) {
         for (let id = idStart; id <= idEnd; id++) {
             const url = `${endpoint}/${id}`;
             try {
-                const response = await fetch(url, { method: "POST" });
+                const response = await fetch(url, { method: "GET" });
                 const text = await response.text();
                 console.log(`Respuesta para ${url}: ${text}`);
             } catch (error) {
@@ -31,3 +37,21 @@ async function probeEndpoints() {
 }
 
 probeEndpoints();
+
+
+
+
+
+Debo hacer un trabajo en el cual construyo una aplicacion web vulnerable, de modo que pueda concatenar  las siguientes vulnerabilidades del 
+owasp top 10 (significa que explotar una vulnerabilidad me permita llegar a la siguiente, y asi sucesivamente):
+A3: sql Injection(para poder loguearme como un usuario), A1: Broken Access Control (para encontrar una ruta desde el inpector del navegador 
+que me permita acceder a algun archivo pdf), A2: Cryptographic Failures(para poder desencriptar ese archivo pdf encriptado con DES mediante 
+fuerza bruta), A10: Server-Side Request Forgery (SSRF) (dentro del pdf encontrado hay un link que nos permite explotar esta vulnerabilidad, 
+proponé como podriamos aplicar SSRF en este caso)
+Contexto de la aplicacion: aplicación web utilizada por empresas para la gestión de empleados y procesos de recursos humanos. La plataforma 
+permite a los empleados acceder a funcionalidades como: 
+Registro y actualización de datos personales.
+Consulta de nóminas y recibos de sueldo.
+Descarga de documentos laborales (contratos, certificados, etc.).
+
+Utilizaré la estructura que me indicaste anteriormente, por el momento solo necesito que me ayudes a crear la logica de login de forma tal que sea vulnerable a A3: sql Injection(se utilizará una base de datos mysql con una tabla usuarios con los campos dni, email, etc). 

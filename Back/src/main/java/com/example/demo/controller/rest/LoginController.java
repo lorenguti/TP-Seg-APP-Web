@@ -17,13 +17,13 @@ import java.sql.Statement;
 @Controller
 public class LoginController {
 
-    @GetMapping("/loginPage")
+    @GetMapping("/login")
     public String showLoginPage() {
         return "login";  // Renderiza la plantilla login.html
     }
 
     @PostMapping("/login")
-    public String handleLogin( @RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+    public String handleLogin( @RequestParam("dni") String dni, @RequestParam("password") String password, Model model) {
         
         String jdbcUrl = "jdbc:mysql://localhost:3306/rrhh_db"; // Reemplaza con tu base de datos
         String dbUsername = "root"; // Usuario de MySQL
@@ -33,7 +33,7 @@ public class LoginController {
             Statement statement = connection.createStatement();
 
             // Vulnerabilidad de SQL Injection al concatenar directamente el input en la consulta
-            String query = "SELECT * FROM users WHERE dni = '" + username + "' AND password = '" + password + "'";
+            String query = "SELECT * FROM users WHERE dni = '" + dni + "' AND password = '" + password + "'";
             ResultSet resultSet = statement.executeQuery(query);
 
             
@@ -48,9 +48,4 @@ public class LoginController {
             return "Error en el login";
         }
     }
-
-    // @GetMapping("/home")
-    // public String showHomePage() {
-    //     return "home";  // Renderiza la plantilla home.html
-    // }
 }
