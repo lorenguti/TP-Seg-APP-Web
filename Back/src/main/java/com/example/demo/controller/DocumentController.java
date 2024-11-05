@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.Base64;
 
 import java.util.List;
 
@@ -31,8 +32,10 @@ public class DocumentController {
     @GetMapping("/files/receipts/{id}")
     public ResponseEntity<Resource> getReceipt(@PathVariable Long id) {
         Resource file = documentService.getReceiptById(id);
+        byte[] encodedBytes = Base64.getEncoder().encode(file.getFilename().getBytes());
+        System.out.println("encodedBytes " + new String(encodedBytes));
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(encodedBytes) + "\"")
                 .body(file);
     }
 
@@ -40,8 +43,10 @@ public class DocumentController {
     @GetMapping("/files/contracts/{id}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {       
         Resource file = documentService.getDocumentById(id);
+        byte[] encodedBytes = Base64.getEncoder().encode(file.getFilename().getBytes());
+        System.out.println("encodedBytes " + new String(encodedBytes));
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(encodedBytes) + "\"")
                 .body(file);
     }
 
