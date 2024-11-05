@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.model.LoginResponseDTO;
+import com.example.demo.model.ReqLogin;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface LoginService {
-    String login(@RequestParam String dni, @RequestParam String password);
+    LoginResponseDTO login(ReqLogin reqLogin);
 }
