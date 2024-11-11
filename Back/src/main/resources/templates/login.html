@@ -13,7 +13,7 @@
             height: 100vh;
             margin: 0;
         }
-        
+
         /* Tarjeta de login */
         .login-card {
             background-color: #ffffff;
@@ -74,18 +74,63 @@
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>Login</h2>
-        <form action="/login" method="post">
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" name="dni" required>
+<div class="login-card">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
 
-            <button type="submit">Login</button>
-        </form>
-        <p class="error-message" th:text="${errorMessage}"></p>
-    </div>
+        <button type="submit">Login</button>
+        <button type="button" onClick="redirect()">Registrarse</button>
+    </form>
+    <p class="error-message" id="errorMessage"></p>
+</div>
+
+<script>
+    function redirect(){
+        console.log("REDIRECT")
+        window.location.href = 'http://localhost:8080/register';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        console.log("LOGIN")
+        event.preventDefault(); // Evitar el envío normal del formulario
+
+        // Obtener los valores de los campos
+        const dni = document.getElementById('dni').value;
+        const password = document.getElementById('password').value;
+
+        // Realizar la llamada asíncrona
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dni: dni, password: password })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.errorMessage) {
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    window.location.href = data.redirectUrl;
+                } else {
+                    document.getElementById('errorMessage').innerText = data.errorMessage;
+                }
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText =  error;
+            });})
+
+</script>
+
+
 </body>
 </html>
