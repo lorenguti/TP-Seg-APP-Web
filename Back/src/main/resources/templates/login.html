@@ -84,12 +84,19 @@
         <input type="password" id="password" name="password" required>
 
         <button type="submit">Login</button>
+        <button type="button" onClick="redirect()">Registrarse</button>
     </form>
     <p class="error-message" id="errorMessage"></p>
 </div>
 
 <script>
+    function redirect(){
+        console.log("REDIRECT")
+        window.location.href = 'http://localhost:8080/register';
+    }
+
     document.getElementById('loginForm').addEventListener('submit', function(event) {
+        console.log("LOGIN")
         event.preventDefault(); // Evitar el envío normal del formulario
 
         // Obtener los valores de los campos

@@ -26,8 +26,10 @@ async function probeEndpoints() {
             const url = `${endpoint}/${id}`;
             try {
                 const response = await fetch(url, { method: "GET" });
-                const text = await response.text();
-                console.log(`Respuesta para ${url}: ${text}`);
+                if(response.status == 200){
+                    const text = await response.text();
+                    console.log(`Respuesta para ${url}: ${text}`);
+                }
             } catch (error) {
                 console.error(`Error en ${url}:`, error);
             }
@@ -39,6 +41,9 @@ probeEndpoints();
 
 
 
+Script para descifrar archivo decrypt.java
+javac decrypt.java   -- comando para compilar
+java decrypt 755.des descifrado.pdf listado.txt  -- comando para ejecutar
 
 
 Debo hacer un trabajo en el cual construyo una aplicacion web vulnerable, de modo que pueda concatenar  las siguientes vulnerabilidades del 

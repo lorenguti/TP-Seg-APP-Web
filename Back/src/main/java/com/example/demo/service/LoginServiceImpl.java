@@ -43,8 +43,9 @@ public class LoginServiceImpl implements LoginService {
                 usr.setName(resultSet.getString("name"));
                 usr.setUser(resultSet.getString("user"));
                 usr.setEmail(resultSet.getString("email"));
-                user.append("DNI: ").append(usr.getDni())
-                        .append(", Password: ").append(resultSet.getString("password"))
+                user.append("dni:").append(usr.getDni())
+                        .append(", registered:").append(resultSet.getString("registered"))
+                        .append(", email:").append(resultSet.getString("email"))
                         .append("<br>");
                 count += 1;
             }
