@@ -6,6 +6,7 @@ import { ApproveController } from "../controllers/approve.controller.js";
 
 const router = Router();
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 router.get('/', verifyToken, ApproveController.get ); // token (mail + APISecret) y id del contrato
 
@@ -16,7 +17,8 @@ const header = req.header("Authorization") || "";
     return res.status(401).json({ message: "Token not provied" });
   }
   try {
-    const secretKey = process.env.TOKEN_SECRET;
+    //const secretKey = process.env.TOKEN_SECRET;
+    const secretKey = crypto.createHash('sha256').update(process.env.TOKEN_SECRET).digest();
     console.log(token);
     const payload = jwt.verify(token, secretKey);
     req.mail = payload.mail;
