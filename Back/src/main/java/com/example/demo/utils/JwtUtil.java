@@ -2,10 +2,14 @@ package com.example.demo.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Base64;
 import java.util.HashMap;
@@ -14,9 +18,7 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    // Método para obtener una clave secreta de 256 bits usando SHA-256
-    private Key generateSecretKey(String secret) throws Exception {
-        // Usamos SHA-256 para generar una clave de 256 bits a partir de la clave secreta "TPSEGWEB"
+    private Key generateSecretKey(String secret) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] keyBytes = digest.digest(secret.getBytes());
         return new javax.crypto.spec.SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
@@ -25,20 +27,20 @@ public class JwtUtil {
     // Genera un token JWT utilizando la clave secreta generada
     public String generateToken(String email) {
         try {
-            // Generar la clave secreta con "TPSEGWEB"
-            Key secretKey = generateSecretKey("TPSEGWEB");
             Map<String, Object> customHeader = Map.of(
-                    "alg", "HS256", // Algoritmo de firma
-                    "typ", "JWT"   // Tipo de token
+                    "alg", "HS256",
+                    "typ", "JWT"
             );
 
-            // Generar el JWT con campos personalizados y header predeterminado (HS256, JWT)
+            Key kc = generateSecretKey("TPSEGWEB");
+
+
+            //////Key secretKey = new javax.crypto.spec.SecretKeySpec("TPSEGWEB".getBytes(), SignatureAlgorithm.HS256.getJcaName());
             return Jwts.builder()
-                    .claim("apikey", "TPSEGWEB")  // Aquí se añade el campo "apikey"
-                    .claim("mail", email)
-                    .setHeader(customHeader)  // Establecer el header personalizado
-                    .signWith(secretKey)          // Firmar con la clave secreta
-                    .compact();                   // Generar el token
+                    .setHeader(customHeader)           // Establecer el header personalizado
+                    .setClaims(Map.of("mail", "ejemplo@gmail.com"))  // Establecer el payload con un Map
+                    .signWith(kc)               // Firmar con la clave secreta
+                    .compact();                // Generar el token
         } catch (Exception e) {
             throw new RuntimeException("Error generando el token", e);
         }
