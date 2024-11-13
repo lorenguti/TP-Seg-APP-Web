@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Recursos Humanos - Aceptación de Políticas</title>
+    <title>Sistema de Recursos Humanos - Aprobación de Contratación</title>
     <style>
         /* Estilos básicos */
         body {
@@ -75,25 +75,24 @@
 <body>
 
 <div class="form-container">
-    <h2>Aceptación de Nuevas Políticas</h2>
+    <h2>Aprobación de Contratación de Nuevo Empleado</h2>
     <p>
-        Para continuar utilizando el sistema de Recursos Humanos, es necesario que acepte las nuevas políticas de transacciones
-        aplicables a la gestión de datos personales, nóminas, y transacciones laborales. Estas políticas buscan proteger su información
-        personal y garantizar la transparencia en las operaciones de Recursos Humanos.
+        Para proceder con la contratación del nuevo empleado, confirme que aprueba las políticas de contratación
+        y las condiciones establecidas en el acuerdo. Este paso es esencial para garantizar la formalización de la contratación.
     </p>
     <p>
-        Lea atentamente los términos y condiciones antes de continuar.
+        Lea atentamente los términos antes de continuar.
     </p>
 
-    <form id="acceptanceForm">
+    <form id="approvalForm">
         <input type="hidden" id="email" name="email" th:value="${email}" />
         <input type="hidden" id="idCont" name="idCont" th:value="${idCont}" />
 
         <div class="checkbox-container">
-            <input type="checkbox" id="acceptTerms" name="acceptTerms" onchange="toggleSubmitButton()">
-            <label for="acceptTerms">Acepto las nuevas políticas de transacciones de Recursos Humanos</label>
+            <input type="checkbox" id="approveContract" name="approveContract" onchange="toggleSubmitButton()">
+            <label for="approveContract">Confirmo la aprobación del contrato laboral y condiciones establecidas.</label>
         </div>
-        <button type="button" class="submit-btn" id="submitButton" onclick="submitForm()" disabled>Aceptar y Continuar</button>
+        <button type="button" class="submit-btn" id="submitButton" onclick="submitForm()" disabled>Aprobar y Continuar</button>
     </form>
 
     <div class="response-message" id="responseMessage"></div>
@@ -101,36 +100,37 @@
 
 <script>
     function toggleSubmitButton() {
-        const checkbox = document.getElementById("acceptTerms");
+        const checkbox = document.getElementById("approveContract");
         const submitButton = document.getElementById("submitButton");
         submitButton.disabled = !checkbox.checked;
     }
 
     function submitForm() {
-        const checkbox = document.getElementById("acceptTerms");
+        const checkbox = document.getElementById("approveContract");
 
         if (!checkbox.checked) return;
         const email = document.getElementById("email").value;
         const idCont = document.getElementById("idCont").value;
+
         // Enviar datos a través de AJAX
         fetch('/api/contract', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({url:"https://tp-seg-app-web.onrender.com/api/approve?id="+idCont ,email:email})
+            body: JSON.stringify({url:"https://tp-seg-app-web.onrender.com/api/approve/"+idCont, email: email})
         })
             .then(response => response.json())
             .then(data => {
                 const responseMessage = document.getElementById("responseMessage");
                 responseMessage.style.display = "block";
-                responseMessage.innerText = "Políticas aceptadas exitosamente.";
+                responseMessage.innerText = "Contrato aprobado exitosamente.";
             })
             .catch(error => {
                 console.error("Error:", error);
                 const responseMessage = document.getElementById("responseMessage");
                 responseMessage.style.display = "block";
-                responseMessage.innerText = "Ocurrió un error al aceptar las políticas.";
+                responseMessage.innerText = "Ocurrió un error al aprobar el contrato.";
                 responseMessage.style.color = "red";
             });
     }

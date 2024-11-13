@@ -1,38 +1,66 @@
-// Almacenamos los IDs ya aprobados
+// Store the approved IDs
 const approvedIds = new Set();
 
-// IDs disponibles (puedes cambiar esta lista según sea necesario)
-const availableIds = [101, 234, 356, 478, 512, 634, 756, 879, 910, 102];
+// Available IDs (you can change this list as needed)
+const availableIds = [754, 234, 356, 478, 512, 634, 756, 879, 910, 102];
+
+// Invented names associated with the IDs
+const idToNameMap = {
+  754: "Juan Pérez",
+  234: "Ana Gómez",
+  356: "Carlos Rodríguez",
+  478: "Laura Sánchez",
+  512: "José Martínez",
+  634: "María López",
+  756: "David Fernández",
+  879: "Pedro García",
+  910: "Marta Ruiz",
+  102: "Luis Díaz"
+};
 
 const get = async (req, res) => {
   const idParam = req.params.id;
   const mail = req.mail;
 
-  // Verifica si el usuario tiene acceso
+  // Verify if the user has access
   if (mail !== "ejemplo@gmail.com") {
     return res.status(400).json({ "msg": "Unauthorized user" });
   }
 
-  // Si el parámetro `id` es "admin", devolver el listado de IDs disponibles no aprobados
+  // If the `id` parameter is "admin", return the list of available IDs that are not approved
   if (idParam === "admin") {
     const idsNotApproved = availableIds.filter(id => !approvedIds.has(id));
-    return res.status(200).json({ "availableIds": idsNotApproved });
+
+    // Dynamically create the HTML with names
+    let htmlContent = '<html><head><title>Contract Admin Page</title></head><body>';
+    htmlContent += '<h2>IDs Available for Approval</h2><ul>';
+
+    // Add the IDs and names to the list
+    idsNotApproved.forEach(id => {
+      const name = idToNameMap[id] || "Name not available"; // If no name, provide a default
+      htmlContent += `<li>ID: ${id} - Name: ${name}</li>`;
+    });
+
+    htmlContent += '</ul></body></html>';
+
+    // Send the HTML as a response
+    return res.status(200).send(htmlContent);
   }
 
-  // Convertir el ID a número si no es "admin"
+  // Convert the ID to a number if it is not "admin"
   const id = parseInt(idParam, 10);
 
-  // Verificar si el ID es válido en la lista original
+  // Check if the ID is valid in the original list
   if (!availableIds.includes(id)) {
-    return res.status(404).json({ "msg": "NOOK - ID no existe" });
+    return res.status(404).json({ "msg": "NOOK - ID does not exist" });
   }
 
-  // Verificar si el ID ya fue aprobado
+  // Check if the ID has already been approved
   if (approvedIds.has(id)) {
-    return res.status(409).json({ "msg": "NOOK - ID ya fue procesado" });
+    return res.status(409).json({ "msg": "NOOK - ID has already been processed" });
   }
 
-  // Marcar el ID como aprobado y responder
+  // Mark the ID as approved and respond
   approvedIds.add(id);
   return res.status(200).json({ "msg": "Ok", "id": id });
 };
@@ -44,9 +72,23 @@ const getAvailableIds = async (req, res) => {
     return res.status(400).json({ "msg": "Unauthorized user" });
   }
 
-  // Filtrar los IDs no aprobados
+  // Filter the IDs that are not approved
   const idsNotApproved = availableIds.filter(id => !approvedIds.has(id));
-  return res.status(200).json({ "id_contract": idsNotApproved });
+
+  // Dynamically create the HTML with names
+  let htmlContent = '<html><head><title>List of Unapproved IDs</title></head><body>';
+  htmlContent += '<h2>IDs Available for Approval</h2><ul>';
+
+  // Add the IDs and names to the list
+  idsNotApproved.forEach(id => {
+    const name = idToNameMap[id] || "Name not available"; // If no name, provide a default
+    htmlContent += `<li>ID: ${id} - Name: ${name}</li>`;
+  });
+
+  htmlContent += '</ul></body></html>';
+
+  // Send the HTML as a response
+  res.status(200).send(htmlContent);
 };
 
 export const ApproveController = {
