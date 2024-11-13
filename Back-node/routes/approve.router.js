@@ -8,7 +8,9 @@ const router = Router();
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
-router.get('/', verifyToken, ApproveController.get ); // token (mail + APISecret) y id del contrato
+router.get('/approve/:id', verifyToken, ApproveController.get ); // token (mail + APISecret) y id del contrato
+
+router.get('/admin', verifyToken, ApproveController.getAvailableIds);
 
 function verifyToken(req, res, next) {
 const header = req.header("Authorization") || "";
