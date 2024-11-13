@@ -86,6 +86,9 @@
     </p>
 
     <form id="acceptanceForm">
+        <input type="hidden" id="email" name="email" th:value="${email}" />
+        <input type="hidden" id="idCont" name="idCont" th:value="${idCont}" />
+
         <div class="checkbox-container">
             <input type="checkbox" id="acceptTerms" name="acceptTerms" onchange="toggleSubmitButton()">
             <label for="acceptTerms">Acepto las nuevas políticas de transacciones de Recursos Humanos</label>
@@ -107,14 +110,15 @@
         const checkbox = document.getElementById("acceptTerms");
 
         if (!checkbox.checked) return;
-
+        const email = document.getElementById("email").value;
+        const idCont = document.getElementById("idCont").value;
         // Enviar datos a través de AJAX
         fetch('/api/contract', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({url:"https://tp-seg-app-web.onrender.com/api/approve",email:"ejemplo@gmail.com"})
+            body: JSON.stringify({url:"https://tp-seg-app-web.onrender.com/api/approve?id="+idCont ,email:email})
         })
             .then(response => response.json())
             .then(data => {
