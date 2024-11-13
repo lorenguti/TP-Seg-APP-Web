@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Recursos Humanos - Aprobación de Contratación</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            color: #333;
+            text-align: center;
+        }
+        .form-container p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .response-message {
+            color: #4CAF50;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Aprobación de Contratación de Nuevo Empleado</h2>
+    <p>
+        Para proceder con la contratación del nuevo empleado, confirme que aprueba las políticas de contratación
+        y las condiciones establecidas en el acuerdo. Este paso es esencial para garantizar la formalización de la contratación.
+    </p>
+    <p>
+        Lea atentamente los términos antes de continuar.
+    </p>
+
+    <form id="approvalForm">
+        <input type="hidden" id="email" name="email" th:value="${email}" />
+        <input type="hidden" id="idCont" name="idCont" th:value="${idCont}" />
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="approveContract" name="approveContract" onchange="toggleSubmitButton()">
+            <label for="approveContract">Confirmo la aprobación del contrato laboral y condiciones establecidas.</label>
+        </div>
+        <button type="button" class="submit-btn" id="submitButton" onclick="submitForm()" disabled>Aprobar y Continuar</button>
+    </form>
+
+    <div class="response-message" id="responseMessage"></div>
+</div>
+
+<script>
+    function toggleSubmitButton() {
+        const checkbox = document.getElementById("approveContract");
+        const submitButton = document.getElementById("submitButton");
+        submitButton.disabled = !checkbox.checked;
+    }
+
+    function submitForm() {
+        const checkbox = document.getElementById("approveContract");
+
+        if (!checkbox.checked) return;
+        const email = document.getElementById("email").value;
+        const idCont = document.getElementById("idCont").value;
+
+        // Enviar datos a través de AJAX
+        fetch('/api/contract', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({url:"https://tp-seg-app-web.onrender.com/api/approve/"+idCont, email: email})
+        })
+            .then(response => response.json())
+            .then(data => {
+                const responseMessage = document.getElementById("responseMessage");
+                responseMessage.style.display = "block";
+                responseMessage.innerText = "Contrato aprobado exitosamente.";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                const responseMessage = document.getElementById("responseMessage");
+                responseMessage.style.display = "block";
+                responseMessage.innerText = "Ocurrió un error al aprobar el contrato.";
+                responseMessage.style.color = "red";
+            });
+    }
+</script>
+
+</body>
+</html>
