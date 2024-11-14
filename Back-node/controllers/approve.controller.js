@@ -2,7 +2,7 @@
 const approvedIds = new Set();
 
 // Available IDs (you can change this list as needed)
-const availableIds = [754, 234, 356, 478, 512, 634, 756, 879, 910, 102];
+const availableIds = [754, 234, 356, 478, 512, 634, 756, 910,755,102];
 
 // Invented names associated with the IDs
 const idToNameMap = {
@@ -13,8 +13,8 @@ const idToNameMap = {
   512: "José Martínez",
   634: "María López",
   756: "David Fernández",
-  879: "Pedro García",
   910: "Marta Ruiz",
+  755: "Claudio Ortiz",
   102: "Luis Díaz"
 };
 
