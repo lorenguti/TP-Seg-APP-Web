@@ -24,7 +24,7 @@ public class LoginServiceImpl implements LoginService {
 
         String jdbcUrl = "jdbc:mysql://localhost:3306/rrhh_db";
         String dbUsername = "root";
-        String dbPassword = "root";
+        String dbPassword = "Elpeque7/85";
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword)) {
             Statement statement = connection.createStatement();
@@ -38,17 +38,19 @@ public class LoginServiceImpl implements LoginService {
 
             User usr = new User();
             while (resultSet.next()) {
-                // Suponiendo que quieres ver los campos "dni" y "password" de cada usuario
-                usr.setDni(resultSet.getString("dni"));
-                usr.setName(resultSet.getString("name"));
-                usr.setUser(resultSet.getString("user"));
-                usr.setEmail(resultSet.getString("email"));
-                user.append("dni:").append(usr.getDni())
-                        .append(", registered:").append(resultSet.getString("registered"))
-                        .append(", email:").append(resultSet.getString("email"))
-                        .append("<br>");
+                String dni = resultSet.getString("dni"); 
+                String email = resultSet.getString("email"); 
+                String registered = resultSet.getString("registered"); 
+                String name = resultSet.getString("name"); 
+                String userr = resultSet.getString("user"); 
+                usr.setDni(dni);
+                usr.setEmail(email);
+                usr.setName(name);
+                usr.setUser(userr);
+                user.append("dni: ").append(dni).append(", Email: ").append(email).append("Registered: ").append(registered).append("\n");
                 count += 1;
             }
+           
             if (count == 1) {
                 return getLoginResponseDTO(usr);
             } else {
