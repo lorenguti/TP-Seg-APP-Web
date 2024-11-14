@@ -8,7 +8,7 @@ const availableIds = [754, 234, 356, 478, 512, 634, 756, 910,755,102];
 const idToNameMap = {
   754: "Juan Pérez",
   234: "Ana Gómez",
-  356: "Carlos Rodríguez",
+  356: "Valentino Tapia",
   478: "Laura Sánchez",
   512: "José Martínez",
   634: "María López",
