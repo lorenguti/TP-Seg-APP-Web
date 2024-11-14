@@ -123,7 +123,7 @@ fetch('http://localhost:8080/api/contract', {
 
 
 Paso 4
-Se Procede a corer el siguiente script para aprobar la contratacion, teniendo el id del Empleado a Contratar(879) --> https://tp-seg-app-web.onrender.com/api/approve/879:
+Se Procede a corer el siguiente script para aprobar la contratacion, teniendo el id del Empleado a Contratar(512) --> https://tp-seg-app-web.onrender.com/api/approve/512:
 
 fetch('http://localhost:8080/api/contract', {
     method: 'POST',
@@ -132,7 +132,7 @@ fetch('http://localhost:8080/api/contract', {
     },
     body: JSON.stringify({
         email: "ejemplo@gmail.com",
-        url: "https://tp-seg-app-web.onrender.com/api/approve?id=879"
+        url: "https://tp-seg-app-web.onrender.com/api/approve?id=512"
     })
 })
 .then(response => {
@@ -147,7 +147,7 @@ fetch('http://localhost:8080/api/contract', {
 
 
 Paso 4
-Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/admin; Y se observa que el 879 ya no aparece entre los disponibles
+Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/admin; Y se observa que el 512 ya no aparece entre los disponibles
 
 <html>
 
