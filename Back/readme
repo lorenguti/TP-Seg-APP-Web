@@ -66,12 +66,12 @@ Utilizaré la estructura que me indicaste anteriormente, por el momento solo nec
 SSRF
 
 Paso 1
-Acceder al formulario --> aceptar la propuesta (Se esta aceptando la propuesta del 754)
+Acceder al formulario --> aceptar la propuesta (Se esta aceptando la propuesta del 755)
 
 Paso 2
 Se observa que se hace aprobo la contratacion exitosamente, una llamada a http://localhost:8080/api/contract , donde se le pasa
    --->email: "ejemplo@gmail.com"
-   --->url: "https://tp-seg-app-web.onrender.com/api/approve/754"
+   --->url: "https://tp-seg-app-web.onrender.com/api/approve/755"
 
 Paso 3
 Se envia la solicitud pero cambiando la url por https://tp-seg-app-web.onrender.com/api/approve/admin;
