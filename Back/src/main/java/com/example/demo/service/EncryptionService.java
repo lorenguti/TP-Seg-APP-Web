@@ -83,7 +83,7 @@ public class EncryptionService {
         contenido.setFont(PDType1Font.HELVETICA_BOLD, 12);
         contenido.showText("Para confirmar y avanzar con el proceso de contratación, visite:");
         contenido.newLineAtOffset(0, -20);
-        contenido.showText("http://localhost:8080/formV2024?ce="+jwtUtilGen.generateToken("754","ejemplo@gmail.com"));
+        contenido.showText("http://localhost:8080/formV2024?ce="+jwtUtilGen.generateToken("755","ejemplo@gmail.com"));
 
         // Finalizar el flujo de contenido y cerrar el documento
         contenido.endText();
